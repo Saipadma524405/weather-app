@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather-App</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div>
+                <form action="" class="search" id ="search">
+                    <input type="text" id="query placeholder="Search...">
+                    <button>S</button>
+                </form>
+                <div class="weather-icon">
+                   <img src="./images/clear-sky.png" alt="" id="icon"> 
+                </div>
+                <div class="temprature">
+                    <h1 id="temp">0 </h1>
+                    <span>°C</span>
+                </div>
+                <div class="date-time">
+                    <p id="date-time">Monday , 12:00</p>
+                </div>
+                <div class="divider"></div>
+                <div class="condition-rain">
+                    <i></i>
+                    <div class="condition" id="condition">condition</div>
+                </div>
+                <div class="rain">
+                    <i></i>
+                    <p id="id">perc -0%</p>
+                </div>
+            </div>
+            <div class="location">
+                <div class="location-icon">
+                    <i></i>
+
+                </div>
+                <div class="location-text">
+                    <div class="location">location</div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="main">
+          <nav>
+                <ul  class="options">
+                    <button class="hourly">today</button>
+                    <button class="week active">Week</button>
+                </ul>
+                <ul class="options units">
+                    <button class="celcius active">°C</button>
+                    <button class="fahrenheit" >°F</button>
+                </ul>
+          </nav>
+          <div class="cards" id="weather-cards">
+                <div class="card">
+                    <h2 class="day-name">Monday</h2>
+                        <div class="card-icon">
+                            <img src="./images/sun-cloudy.png" alt="">
+                        </div>
+                        <div class="day-temp">
+                            <h2 class="temp">32</h2>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                </div>
+          </div>
+          
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script>
+       
+    </script>
+
+</body>
+
+</html>
