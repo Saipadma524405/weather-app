@@ -243,4 +243,14 @@ nav .units button{
     margin-top: 20px;
     text-align: left;
 }
+.credits{
+    text-align: center;
+    font-size: 15px;
+    color: #c2c2c2;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
 
