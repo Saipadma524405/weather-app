@@ -1,9 +1,29 @@
 const temp = document.getElementById("temp");
   date = document.getElementById("date-time");
+ currentLocation =document.getElementById(".location");
+    
+condition =document.getElementById("condition");
+rain = document.getElementById("id");
+mainIcon =document.getElementById("icon");
+uvIndex =document.querySelector(".uv-index");
+uvText =document.querySelector(".uv-text");
+windSpeed =document.querySelector(".wind-speed");
+sunRise=document.querySelector(".sunrise");
+sunSet =document.querySelector(".sunset");
+humidity=document.querySelector(".humidity");
+visibility =document.querySelector(".visibility");
+humidityStatus = document.querySelector(".humidity-status");
+airQuality =document.querySelector(".air-quality");
+airQualityStatus = document.querySelector(".air-quality-status");
+visibilityStatus = document.querySelector(".visibility-status");
+
+
+
+
 
 
 let currentCity = "";
-let currentUnit = "C";
+let currentUnit = "c";
 let hourlyorWeek = "Week"
 // update time and Date
 function getDateTime() {
@@ -67,12 +87,22 @@ function getWeatherData(city,unit,hourlyorWeek){
     .then((response) =>response.json())
     .then( (data) => {
         let today = data.currentConditions;
-        if( unit === "c"){
-            temp.innerText = today.temp;
-
-        }else {
-            temp.innerText == celciousToFahreheit(today.temp)
+        
+        if (temp) {
+            temp.innerText = unit === "c" ? today.temp : celciousToFahreheit(today.temp);
         }
+
+        if (currentLocation) currentLocation.innerText = data.resolvedAddress;
+        if (condition) condition.innerText = today.conditions;
+        if (rain) rain.innerText = "Perc - " + today.precip + "%";
+        if (uvIndex) uvIndex.innerText = today.uvindex;
+        if (windSpeed) windSpeed.innerText = today.windspeed;
+        if (humidity) humidity.innerText = today.humidity + "%";
+        if (visibility) visibility.innerText = today.visibility;
+        if (airQuality) airQuality.innerText = today.winddir;
+
+       measureUvIndex(today.uvindex);
+
     });
 
 
@@ -80,6 +110,11 @@ function getWeatherData(city,unit,hourlyorWeek){
 }
 
 // covert celcious to fahrenheit
-function celciousToFahrehei(){
-    
+function celciousToFahreheit(temp){
+    return ((temp *9)  / 5 + 32).toFixed(1);
+
 }
+
+
+
+
