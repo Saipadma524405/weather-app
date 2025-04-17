@@ -115,6 +115,21 @@ function celciousToFahreheit(temp){
 
 }
 
+//   function to get uv index status 
+function measureUvIndex(uvIndex){
+    if(uvIndex <= 2){
+        uvText.innerText ="Low";
+    }else if (uvIndex <= 5){
+        uvText.innerText ="Moderate";
+    }else if (uvIndex <= 7){
+        uvText.innerText ="High";
+    }else if (uvIndex <= 10){
+        uvText.innerText ="Very High";
+    }else {
+        uvText.innerText ="Extreme";
+    }
+}
+
 
 
 
