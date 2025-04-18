@@ -1,6 +1,6 @@
 const temp = document.getElementById("temp");
 date = document.getElementById("date-time");
-currentLocation = document.getElementById(".location");
+currentLocation = document.getElementById("location");
 
 condition = document.getElementById("condition");
 rain = document.getElementById("id");
@@ -17,7 +17,14 @@ airQuality = document.querySelector(".air-quality");
 airQualityStatus = document.querySelector(".air-quality-status");
 visibilityStatus = document.querySelector(".visibility-status");
 
-weatherCards = document.querySelector("#weather-cards")
+weatherCards = document.querySelector("#weather-cards");
+celciousBtn = document.querySelector(".celcious");
+fahrenheitBtn = document.querySelector(".fahrenheit");
+hourlyBtn = document.querySelector(".hourly");
+weekBtn = document.querySelector(".week");
+let tempUnitElements = document.querySelectorAll(".temp-unit");
+
+const unitLabel = document.getElementById("unit-label");
 
 
 
@@ -70,9 +77,10 @@ function getPublicIp() {
         .then(response => response.json())
         .then((data) => {
             console.log(data);
-            currentCity = data.currentCity
+            currentCity = data.city;
             getWeatherData(data.city, currentUnit, hourlyorWeek);
-        });
+        })
+
 
 
 }
@@ -91,7 +99,13 @@ function getWeatherData(city, unit, hourlyorWeek) {
             let today = data.currentConditions;
 
             if (temp) {
-                temp.innerText = unit === "c" ? today.temp : celciousToFahreheit(today.temp);
+                temp.innerText = unit === "c"
+                    ? today.temp
+                    : celciousToFahreheit(today.temp);
+            }
+            
+            if (unitLabel) {
+                unitLabel.innerText = unit === "c" ? "°C" : "°F";
             }
 
             if (currentLocation) currentLocation.innerText = data.resolvedAddress;
@@ -111,6 +125,7 @@ function getWeatherData(city, unit, hourlyorWeek) {
             if (sunSet) sunSet.innerText = convertTimeTo12HourFormat(today.sunset);
 
             mainIcon.src = getIcon(today.icon);
+            changeBackground(today.icon);
 
             if (hourlyorWeek === "hourly") {
                 updateForecast(data.days[0].hours, unit, "day")
@@ -118,9 +133,12 @@ function getWeatherData(city, unit, hourlyorWeek) {
                 updateForecast(data.days, unit, "week")
             }
 
+      
 
-
-        });
+        })
+        .catch((error) => {
+            alert("City not found in our database");
+        })
 
 
 
@@ -222,8 +240,10 @@ function getIcon(condition) {
         return "./images/rainy.png";
     } else if (condition === "clear-day") {
         return "./images/clear-sky.png";
-    } else {
+    } else if (condition === "clear-night") {
         return "./images/clear-night.png";
+    } else {
+        return "./images/sun.png";
     }
 
 
@@ -234,7 +254,7 @@ function getIcon(condition) {
 function getHour(time) {
     let hour = time.split(":")[0];
     let min = time.split(":")[1];
-    if (hour < 12) {
+    if (hour > 12) {
         hour = hour - 12;
         return `${hour}: ${min} PM`;
     } else {
@@ -286,9 +306,9 @@ function updateForecast(data, unit, type) {
 
         let iconCondition = data[day].icon;
         let iconSrc = getIcon(iconCondition);
-        let tempUnit = "°C";
+        let unitSymbol = "°C";
         if (unit === "f") {
-            tempUnit = "°F";
+            unitSymbol = "°F";
         }
         card.innerHTML = ` <h2 class="day-name">${dayName}</h2>
                         <div class="card-icon">
@@ -296,13 +316,102 @@ function updateForecast(data, unit, type) {
                         </div>
                         <div class="day-temp">
                             <h2 class="temp">${dayTemp}</h2>
-                            <span class="temp-unit">${tempUnit}</span>
+                            <span class="temp-unit">${unitSymbol}</span>
                         </div>`;
 
-       weatherCards.appendChild(card);
-       day++;
+        weatherCards.appendChild(card);
+        day++;
+        tempUnitElements = document.querySelectorAll(".temp-unit");
     }
 
 
+
+}
+
+
+
+function changeBackground(condition) {
+    const body =document.querySelector("body");
+    let bg = "";
+    if (condition === "Partly-cloudy-day") {
+        bg = "./images/pc.webp";
+    } else if (condition === "partly-cloudy-night") {
+        bg = "./images/pcn.jpg";
+    } else if (condition === "rain") {
+        bg = "./images/rain.webp";
+    } else if (condition === "clear-day") {
+        bg = "./images/cd.jpg";
+    } else if (condition === "clear-night") {
+        bg = "./images/cn.jpg";
+    } else {
+        return "./images/pc.webp";
+    }
+
+    body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(${bg})`
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+fahrenheitBtn.addEventListener("click", () => {
+    changeUnit("f");
+
+});
+celciousBtn.addEventListener("click", () => {
+    changeUnit("c");
+});
+
+
+function changeUnit(unit) {
+    if (currentUnit !== unit) {
+        currentUnit = unit;
+        {
+            tempUnitElements.forEach((elem) => {
+                elem.innerHTML = `°${unit.toUpperCase()}`
+            });
+            if (unit === "c") {
+                celciousBtn.classList.add("active");
+                fahrenheitBtn.classList.remove("active");
+            } else {
+                celciousBtn.classList.remove("active");
+                fahrenheitBtn.classList.add("active");
+            }
+            getWeatherData(currentCity, currentUnit, hourlyorWeek);
+
+        }
+    }
+
+}
+
+
+hourlyBtn.addEventListener("click", () => {
+    changeTimeSpan("hourly");
+})
+weekBtn.addEventListener("click", () => {
+    changeTimeSpan("week")
+})
+
+function changeTimeSpan(unit) {
+    if (hourlyorWeek !== unit) {
+        hourlyorWeek = unit;
+        if (unit === "hourly") {
+            hourlyBtn.classList.add("active");
+            weekBtn.classList.remove("active");
+        } else {
+            hourlyBtn.classList.remove("active");
+            weekBtn.classList.add("active");
+        }
+        getWeatherData(currentCity, currentUnit, hourlyorWeek);
+    }
 
 }

@@ -14,7 +14,10 @@ body{
     padding: 50px;
     background-color: rgb(16, 85, 141); 
     transition: background-image 0.3s ease;
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5),url(""));
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("./images/cd.jpg");
+    background-size: cover;
+
+    background-position: center;
 }
 
 img{
