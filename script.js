@@ -26,6 +26,8 @@ let tempUnitElements = document.querySelectorAll(".temp-unit");
 
 const unitLabel = document.getElementById("unit-label");
 
+searchForm = document.querySelector("#search");
+search = document.querySelector("#query")
 
 
 
@@ -103,7 +105,7 @@ function getWeatherData(city, unit, hourlyorWeek) {
                     ? today.temp
                     : celciousToFahreheit(today.temp);
             }
-            
+
             if (unitLabel) {
                 unitLabel.innerText = unit === "c" ? "°C" : "°F";
             }
@@ -133,7 +135,7 @@ function getWeatherData(city, unit, hourlyorWeek) {
                 updateForecast(data.days, unit, "week")
             }
 
-      
+
 
         })
         .catch((error) => {
@@ -331,7 +333,7 @@ function updateForecast(data, unit, type) {
 
 
 function changeBackground(condition) {
-    const body =document.querySelector("body");
+    const body = document.querySelector("body");
     let bg = "";
     if (condition === "Partly-cloudy-day") {
         bg = "./images/pc.webp";
@@ -413,5 +415,69 @@ function changeTimeSpan(unit) {
         }
         getWeatherData(currentCity, currentUnit, hourlyorWeek);
     }
+
+}
+
+
+searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let location = search.value;
+    if (location) {
+        currentCity = location;
+        getWeatherData(currentCity, currentUnit, hourlyorWeek);
+        removeSuggestions();
+    }
+})
+
+cities = [
+    "Abbottabad",
+    "Multan",
+    "Peshawar",
+    "Islamabad",
+    "Mehdipatnam"
+];
+
+var currentFocus;
+search.addEventListener("input", function (e) {
+
+    removeSuggestions();
+    var a,
+        b,
+        i,
+        val = this.value;
+    if (!val) {
+        return false;
+    }
+    currentFocus = -1;
+    a = document.createElement("ul");
+    a.setAttribute("id", "suggestions");
+    this.parentNode.appendChild(a);
+    for (i = 0; i < cities.length; i++) {
+        if (cities[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            b = document.createElement("li");
+            b.innerHTML = "<strong>" + cities[i].substr(0, val.length) + "</strong>"
+            b.innerHTML += cities[i].substr(val.length);
+
+            b.innerHTML += "<input type='hidden' value='" + cities[i] + "'>";
+
+            b.addEventListener("click", function (e) {
+                search.value = this.getElementsByTagName("input")[0].value;
+                currentCity = search.value;
+                getWeatherData(currentCity, currentUnit, hourlyorWeek);
+               
+            });
+
+            a.appendChild(b);
+
+
+        }
+    }
+});
+
+
+
+function removeSuggestions() {
+    var x = document.getElementById("suggestions");
+    if (x) x.parentNode.removeChild(x);
 
 }
