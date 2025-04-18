@@ -464,7 +464,7 @@ search.addEventListener("input", function (e) {
                 search.value = this.getElementsByTagName("input")[0].value;
                 currentCity = search.value;
                 getWeatherData(currentCity, currentUnit, hourlyorWeek);
-               
+
             });
 
             a.appendChild(b);
